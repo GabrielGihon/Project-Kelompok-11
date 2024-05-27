@@ -1,9 +1,10 @@
 from tkinter import *
 from tkinter import messagebox
 import os
+import package.dashboard
 
 def halaman_login():
-    filename = "Project-Kelompok-11/database/datauser.csv"
+    filename = "database/datauser.csv"
 
     global user, pw, window
     window = Tk()
@@ -12,7 +13,7 @@ def halaman_login():
     window.configure(bg="White")
     window.resizable(False, False)
     
-    img = PhotoImage(file="Project-Kelompok-11/assets/background.png")
+    img = PhotoImage(file="assets/background.png")
     Label(window, image=img, border=0, bg="White").place(x=0, y=0)
     
     frame = Frame(window, width=350, height=400, bg="White")
@@ -43,7 +44,7 @@ def halaman_login():
             if z == len(i[0]):
                 with open(filename, "a") as file:
                     file.write(f"{username2},{password2}\n")
-                os.makedirs(f"Project-Kelompok-11/database/{username2}", exist_ok=True)
+                os.makedirs(f"database/{username2}", exist_ok=True)
                 
                 messagebox.showinfo("Berhasil", "Username dan Password telah diregristrasi")
                 window2.destroy()
@@ -67,8 +68,7 @@ def halaman_login():
                     
                     if a == username and b == password:
                         window.destroy()
-                        messagebox.showinfo("Berhasil", "Login sukses")
-                        # md.program()
+                        package.dashboard.dashboard()
                         break
                 else:
                     messagebox.showinfo("Error", "Akun tidak ditemukan")
@@ -110,7 +110,7 @@ def halaman_login():
         window2.configure(bg="White")
         window2.resizable(False, False)
         
-        img = PhotoImage(file="Project-Kelompok-11/assets/background.png")
+        img = PhotoImage(file="assets/background.png")
         Label(window2, image=img, border=0, bg="White").place(x=0, y=0)
         
         frame = Frame(window2, width=350, height=400, bg="White")
