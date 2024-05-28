@@ -4,6 +4,8 @@ from tkinter import ttk
 from tkinter import messagebox
 from PIL import Image, ImageTk
 from tkcalendar import DateEntry
+import csv
+import 
 
 def dashboard():
     root = tk.Tk()
@@ -68,15 +70,55 @@ def dashboard():
         home_frame.pack(pady=20)
 
     def pemasukan_page():
+        frame_atas = tk.Frame(main_frame, width=975, height=40, bg='#c3c3c3')
+        frame_atas.place(x=10, y=10)
+        
         frame_bawah = tk.Frame(main_frame, width=975, height=500, bg='#c3c3c3')
         frame_bawah.place(x=10, y=150)
         
         lb_3 = tk.Label(frame_bawah, text='Pemasukan', font=('Poppins',20), fg='Black', bg='#c3c3c3')
         lb_3.place(x=65, y=20)
+        
+        tk.Label(frame_bawah, text="Masukkan Tanggal Pemasukan:").place(x=65, y=80)
+        date_entry = DateEntry(frame_bawah, date_pattern='dd/MM/yyyy')
+        date_entry.place(x=250, y=80)
+
+        tk.Label(frame_bawah, text="Masukkan Keterangan Pemasukan:").place(x=65, y=120)
+        description_entry = tk.Entry(frame_bawah)
+        description_entry.place(x=250, y=120)
+
+        tk.Label(frame_bawah, text="Masukkan Sumber Pemasukan:").place(x=65, y=160)
+        purpose_combobox = ttk.Combobox(frame_bawah, values=["Gaji", "Investasi", "Part time", "Lainnya"])
+        purpose_combobox.place(x=250, y=160)
+        purpose_combobox.current(0)
+
+        tk.Label(frame_bawah, text="Masukkan Jumlah Pemasukan:").place(x=65, y=200)
+        amount_entry = tk.Entry(frame_bawah)
+        amount_entry.place(x=250, y=200)
 
         
     def pengeluaran_page():
-
+        # def simpan_pengeluaran():
+        #     date_entry.get()
+        #     description_entry.get()
+        #     purpose_combobox.get()
+        #     amount_entry.get()
+            
+        #     filename = "database/{username2}/pengeluaran.csv"
+            
+        #     with open(filename, 'a', newline='') as csvfile:
+        #         simpan = csv.writer(csvfile)
+        #     if csvfile.tell() == 0:
+        #         simpan.writerow(['tanggal','kategori','jumlah','deskrpsi'])
+        #     simpan.writerow([date_entry,description_entry,purpose_combobox,amount_entry])
+            
+        #     messagebox.showinfo("Success", "Data saved successfully!")
+            
+        #     date_entry.delete(0, tk.END)
+        #     description_entry.delete(0, tk.END)
+        #     purpose_combobox.delete(0, tk.END)
+        #     amount_entry.delete(0, tk.END)
+                
         frame_atas = tk.Frame(main_frame, width=975, height=40, bg='#c3c3c3')
         frame_atas.place(x=10, y=10)
 
@@ -102,6 +144,9 @@ def dashboard():
         tk.Label(frame_bawah, text="Masukkan Jumlah Pengeluaran:").place(x=65, y=200)
         amount_entry = tk.Entry(frame_bawah)
         amount_entry.place(x=250, y=200)
+        
+        btn = Button(frame_bawah, text="Simpan", bg="Red", fg="White", command=simpan_pengeluaran)
+        btn.place(x= 280, y=300)
 
     def tagihan_page():
         tagihan_frame = tk.Frame(main_frame)

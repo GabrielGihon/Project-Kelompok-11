@@ -41,14 +41,26 @@ def halaman_login():
                     break
                 else:
                     z += 1
+                
             if z == len(i[0]):
                 with open(filename, "a") as file:
                     file.write(f"{username2},{password2}\n")
                 os.makedirs(f"database/{username2}", exist_ok=True)
                 
+                with open(f"database/{username2}/pemasukan.csv", "w") as file:
+                    file.write("tanggal,kategori,jumlah,deskripsi\n")
+                
+                with open(f"database/{username2}/pengeluaran.csv", "w") as file:
+                    file.write("tanggal,kategori,jumlah,deskripsi\n")
+                
+                with open(f"database/{username2}/tagihan.csv", "w") as file:
+                    file.write("tanggal,nama,jumlah,deskripsi\n")
+                    
+                
                 messagebox.showinfo("Berhasil", "Username dan Password telah diregristrasi")
                 window2.destroy()
                 halaman_login()
+            file1.close()
         
     # Function to handle login
     def login():
