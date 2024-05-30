@@ -1,12 +1,13 @@
 from tkinter import *
 from tkinter import messagebox
 import os
-import package.dashboard
+import main_program
 
 def halaman_login():
     filename = "database/datauser.csv"
 
-    global user, pw, window
+    global user, pw, window, username
+    
     window = Tk()
     window.title("Welcome")
     window.geometry("1200x675")
@@ -48,14 +49,14 @@ def halaman_login():
                 os.makedirs(f"database/{username2}", exist_ok=True)
                 
                 with open(f"database/{username2}/pemasukan.csv", "w") as file:
-                    file.write("tanggal,kategori,jumlah,deskripsi\n")
+                    file.write("tanggal,keterangan,kategori,jumlah\n")
                 
                 with open(f"database/{username2}/pengeluaran.csv", "w") as file:
-                    file.write("tanggal,kategori,jumlah,deskripsi\n")
+                    file.write("tanggal,keterangan,kategori,jumlah\n")
                 
                 with open(f"database/{username2}/tagihan.csv", "w") as file:
-                    file.write("tanggal,nama,jumlah,deskripsi\n")
-                    
+                    file.write("tanggal,keterangan,nama,jumlah\n")
+                
                 
                 messagebox.showinfo("Berhasil", "Username dan Password telah diregristrasi")
                 window2.destroy()
@@ -80,7 +81,7 @@ def halaman_login():
                     
                     if a == username and b == password:
                         window.destroy()
-                        package.dashboard.dashboard()
+                        main_program.dashboard(username)
                         break
                 else:
                     messagebox.showinfo("Error", "Akun tidak ditemukan")
