@@ -4,6 +4,8 @@ from tkinter import ttk
 from tkinter import messagebox
 from PIL import Image, ImageTk
 from tkcalendar import DateEntry
+import package.login
+import pandas as pd
 
 def dashboard():
     root = tk.Tk()
@@ -12,6 +14,21 @@ def dashboard():
     root.resizable(False, False)
 
     def dashboard_page():
+        def update_data():
+            filename1 = f"database/{username}/pemasukan.csv"
+            filename2 = f"database/{username}/pengeluaran.csv"
+
+            data = pd.read_csv(filename1)
+            total1 = data['jumlah'].sum()
+            lb_2.config(text=f"Total Pemasukan :\n\n{total1}")
+            
+            data = pd.read_csv(filename2)
+            total2 = data['jumlah'].sum()
+            lb_3.config(text=f"Total Pengeluaran :\n\n{total2}")
+            
+            total_uang = total1 - total2
+            lb_1.config(text=f"Total Saldo :\n\n{total_uang}")
+        
         home_frame = tk.Frame(main_frame, bg = 'White')
 
         img2 = PhotoImage(file="assets/wl.png")
@@ -62,11 +79,45 @@ def dashboard():
 
         frame_bawah = tk.Frame(main_frame, width=975, height=300, bg='#e8f0fa')
         frame_bawah.place(x=10, y=350)
-
+        
+        update_btn = tk.Button(frame_bawah, width=10, height=10, text="update", bg="Red", command=update_data)
+        update_btn.place(x=50, y=50)
 
         home_frame.pack(pady=100)
 
     def pemasukan_page():
+        def simpan_pemasukan():
+            global filename
+            
+            date_value = date_entry.get()
+            description_value = description_entry.get()
+            purpose_value = purpose_combobox.get()
+            amount_value = amount_entry.get()
+            
+            filename = f"database/{username}/pemasukan.csv"
+            
+            with open(filename, 'a', newline='') as csvfile:
+                writer = csv.writer(csvfile)
+                writer.writerow([date_value, description_value, purpose_value, amount_value])
+            
+            messagebox.showinfo("Success", "Data saved successfully!")
+            
+            date_entry.delete(0, tk.END)
+            description_entry.delete(0, tk.END)
+            purpose_combobox.set('')
+            amount_entry.delete(0, tk.END)
+            total_pemasukan()
+            
+        def total_pemasukan():
+            try:
+                data = pd.read_csv(filename)
+                total = data['jumlah'].sum()
+                lb_utama1.config(text=f"Total Pemasukan : {total}")
+            except FileNotFoundError:
+                lb_utama1.config(text="Total Pemasukan : 0")
+            except KeyError:
+                lb_utama1.config(text="Total Pemasukan : 0")
+            
         lb_utama = tk.Label(main_frame, text='Pemasukan', font=('Poppins', 20), fg='Black', bg='White')
         lb_utama.place(x=30, y=100)
 
@@ -99,10 +150,42 @@ def dashboard():
         amount_entry = tk.Entry(frame_bawah)
         amount_entry.place(x=250, y=200)
         
-        save_btn = tk.Button(frame_bawah, text='Save', font=('Bold', 15), fg='#158aff', bd=0, bg='White')
+        save_btn = tk.Button(frame_bawah, text='Save', font=('Bold', 15), fg='#158aff', bd=0, bg='White', command=simpan_pemasukan)
         save_btn.place(x=200, y=250)
 
     def pengeluaran_page():
+        def simpan_pengeluaran():
+            global filename
+            
+            date_value = date_entry.get()
+            description_value = description_entry.get()
+            purpose_value = purpose_combobox.get()
+            amount_value = amount_entry.get()
+            
+            filename = f"database/{username}/pengeluaran.csv"
+            
+            with open(filename, 'a', newline='') as csvfile:
+                writer = csv.writer(csvfile)
+                writer.writerow([date_value, description_value, purpose_value, amount_value])
+            
+            messagebox.showinfo("Success", "Data saved successfully!")
+            
+            date_entry.delete(0, tk.END)
+            description_entry.delete(0, tk.END)
+            purpose_combobox.set('')
+            amount_entry.delete(0, tk.END)
+            total_pengeluaran()
+        
+        def total_pengeluaran():
+            try:
+                data = pd.read_csv(filename)
+                total = data['jumlah'].sum()
+                lb_utama1.config(text=f"Total Pengeluaran: {total}")
+            except FileNotFoundError:
+                lb_utama1.config(text="Total Pengeluaran: 0")
+            except KeyError:
+                lb_utama1.config(text="Total Pengeluaran: 0")
+        
         lb_utama = tk.Label(main_frame, text='Pengeluaran', font=('Poppins', 20), fg='Black', bg='White')
         lb_utama.place(x=30, y=100)
 
@@ -112,7 +195,7 @@ def dashboard():
         frame_bawah = tk.Frame(main_frame, width=975, height=500, bg='#e8f0fa')
         frame_bawah.place(x=10, y=150)
 
-        lb_utama1 = tk.Label(main_frame, text='Total Pengeluaran :', font=('Poppins', 20), fg='Black', bg='#e8f0fa')
+        lb_utama1 = tk.Label(main_frame, text='Total Pengeluaran : 0', font=('Poppins', 20), fg='Black', bg='#e8f0fa')
         lb_utama1.place(x=60, y=20)
 
         lb_3 = tk.Label(frame_bawah, text='Isi', font=('Poppins', 20), fg='Black', bg='#e8f0fa')
@@ -135,7 +218,7 @@ def dashboard():
         amount_entry = tk.Entry(frame_bawah)
         amount_entry.place(x=250, y=200)
 
-        save_btn = tk.Button(frame_bawah, text='Save', font=('Bold', 15), fg='#158aff', bd=0, bg='White')
+        save_btn = tk.Button(frame_bawah, text='Save', font=('Bold', 15), fg='#158aff', bd=0, bg='White', command=simpan_pengeluaran)
         save_btn.place(x=200, y=250)
 
     def tagihan_page():
@@ -257,5 +340,10 @@ def dashboard():
 
     root.mainloop()
 
+def main_program():
+    global username
+    package.login.halaman_login()
+    username = package.login.username
+
 if __name__ == "__main__":
-    dashboard()
+    main_program()
