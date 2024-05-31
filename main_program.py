@@ -15,7 +15,7 @@ from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 def dashboard(username):
     root = tk.Tk()
     root.geometry('1200x675')
-    root.title('DASHBOARD')
+    root.title('PiggyFund')
     root.resizable(False, False)
     
     def dashboard_page():
@@ -122,10 +122,10 @@ def dashboard(username):
         canvas.get_tk_widget().place(x=0, y=0, width=975, height=300)
         
         button_image_1 = PhotoImage(file='assets/updt.png')
-        logo_update = tk.Label(home_frame, image=saldo_image )
+        logo_update = tk.Label(frame_totalsaldo, image=button_image_1)
         logo_update.image = button_image_1
-        button_1 = Button( home_frame,
-             border=0, bg="white",
+        button_1 = Button(
+            root , border=0, bg="white",
             image=button_image_1, command=update_data
         )
         button_1.place(x=1100, y=80)
@@ -310,7 +310,35 @@ def dashboard(username):
             status_label.config(text="Data loaded")
             
         def simpan_tagihan():
-            pass 
+            date_value = date_entry.get()
+            description_value = description_entry.get()
+            purpose_value = purpose_combobox.get()
+            amount_value = amount_entry.get()
+            
+            filename = f"database/{username}/tagihan.csv"
+            
+            with open(filename, 'a', newline='') as csvfile:
+                writer = csv.writer(csvfile)
+                writer.writerow([date_value, description_value, purpose_value, amount_value])
+            
+            messagebox.showinfo("Success", "Data saved successfully!")
+            
+            date_entry.delete(0, tk.END)
+            description_entry.delete(0, tk.END)
+            purpose_combobox.set('')
+            amount_entry.delete(0, tk.END)
+            display_tagihan() 
+            total_tagihan()
+            
+        def total_tagihan():
+            try:
+                data = pd.read_csv(filename)
+                total = data['jumlah'].sum()
+                lb_utama1.config(text=f"Total tagihan: {total}")
+            except FileNotFoundError:
+                lb_utama1.config(text="Total tagihan: 0")
+            except KeyError:
+                lb_utama1.config(text="Total tagihan: 0")
         
         tagihan_filename = f"database/{username}/tagihan.csv"
         
@@ -350,21 +378,12 @@ def dashboard(username):
         amount_entry = tk.Entry(frame_bawah)
         amount_entry.place(x=250, y=200)
         
-        button_image_1 = PhotoImage(file='assets/file.png')
-        logo_update = tk.Label(frame_bawah, image=button_image_1 )
-        logo_update.image = button_image_1
-        button_1 = Button(frame_bawah,
-             border=0, bg="#e8f0fa",
-            image=button_image_1, command=simpan_tagihan  
-        )
-        button_1.place(x=650, y=10)
-
         button_image_2 = PhotoImage(file='assets/sove.png')
         logo_update = tk.Label(frame_bawah, image=button_image_2 )
         logo_update.image = button_image_2
         button_2 = Button(frame_bawah,
-             border=0, bg="#e8f0fa",
-            image=button_image_2, command=display_tagihan
+            border=0, bg="#e8f0fa",
+            image=button_image_2, command=simpan_tagihan
         )
         button_2.place(x=250, y=250)
 
@@ -396,24 +415,18 @@ def dashboard(username):
         laporan_frame = tk.Frame(main_frame, bg='White')
         laporan_frame.pack(fill="both", expand=True)
         
-        lb_utama = tk.Label(laporan_frame, text=f'Selamat Datang, {username}', font=('Poppins', 20), fg='Black', bg='#e8f0fa')
-        lb_utama.place(x=600, y=20)
+        lb_laporan = tk.Label(laporan_frame, text='Laporan', font=('Poppins', 20), fg='Black', bg='White')
+        lb_laporan.pack(pady=10)
         
-        
-        
-
         frame_atas = tk.Frame(main_frame, width=975, height=60, bg='#e8f0fa')
         frame_atas.place(x=10, y=10)
         
-        lb_laporan = tk.Label(frame_atas, text='Laporan', font=('Poppins', 20), fg='Black', bg='White')
-        lb_laporan.pack(pady=10)
-
         frame_bawah = tk.Frame(laporan_frame, bg='#e8f0fa')
         frame_bawah.pack(fill="both", expand=True, padx=10, pady=10)
         
         def display_csv_data(dataframe):
             tree.delete(*tree.get_children())  # Clear the current data
-            
+
             tree["columns"] = list(dataframe.columns)
             tree["show"] = "headings"
             
@@ -423,37 +436,20 @@ def dashboard(username):
             
             for index, row in dataframe.iterrows():
                 tree.insert("", "end", values=list(row))
-            
+
             status_label.config(text="data loaded")
-        
+
         def open_pemasukan():
             display_csv_data(pemasukan_data)
-        
+
         def open_pengeluaran():
             display_csv_data(pengeluaran_data)
         
-        button_image_1 = PhotoImage(file='assets/grn.png')
-        logo_update = tk.Label(frame_atas, image=button_image_1 )
-        logo_update.image = button_image_1
-        button_1 = Button(frame_atas,
-             border=0, bg="#e8f0fa",
-            image=button_image_1, command=open_pemasukan
-        )
-        button_1.place(x=30, y=0)
-
-        button_image_2 = PhotoImage(file='assets/red.png')
-        logo_update = tk.Label(frame_atas, image=button_image_2 )
-        logo_update.image = button_image_2
-        button_2 = Button(frame_atas,
-             border=0, bg="#e8f0fa",
-            image=button_image_2, command=open_pengeluaran
-        )
-        button_2.place(x=100, y=0)
-        tree = ttk.Treeview(frame_bawah, show="headings")
-        tree.pack(padx=20, pady=20, fill="both", expand=True)
+        open_pemasukan_button = tk.Button(frame_atas, text="Pemasukan", fg='white', bg='Green', command=open_pemasukan)
+        open_pemasukan_button.pack(side=tk.LEFT, padx=20, pady=10)
         
-        status_label = tk.Label(frame_bawah, text="", padx=20, pady=10, bg='#e8f0fa')
-        status_label.pack()
+        open_pengeluaran_button = tk.Button(frame_atas, text="Pengeluaran", fg='white', bg='Red', command=open_pengeluaran)
+        open_pengeluaran_button.pack(side=tk.LEFT, padx=20, pady=10)
         
         tree = ttk.Treeview(frame_bawah, show="headings")
         tree.pack(padx=20, pady=20, fill="both", expand=True)
@@ -467,6 +463,7 @@ def dashboard(username):
         pengeluaran_indicate.config(bg='#e8f0fa')
         tagihan_indicate.config(bg='#e8f0fa')
         laporan_indicate.config(bg='#e8f0fa')
+        logout_indicate.config(bg='#e8f0fa')
     
     def delete_pages():
         for frame in main_frame.winfo_children():
@@ -534,11 +531,18 @@ def dashboard(username):
     laporan_indicate = tk.Label(options_frame, text='', bg='#e8f0fa',height=2)
     laporan_indicate.place(x=5, y=indicate_y + 160)
     
-    logout_btn = tk.Button(options_frame, text='Logout', font=('century gothic', 15), fg='#0097B2', bd=0, bg='#e8f0fa', command=lambda: indicate(laporan_indicate, laporan_page))
-    laporan_btn.place(x=60, y=button_y + 160)
+    def logout():
+        root.destroy() 
+        main_program()
+
+    logout_btn = tk.Button(options_frame, text='Logout', font=('century gothic', 15), fg='#0097B2', bd=0, bg='#e8f0fa', command=logout)
+    logout_btn.place(x=60, y=button_y + 200)
     
-    logout_icon = tk.PhotoImage(file="assets/prescription.png")
-    Label(options_frame, image=laporan_icon, border=0, bg="#e8f0fa").place(x=25, y=button_y + 208)
+    logout_icon = tk.PhotoImage(file="assets/logout.png")
+    Label(options_frame, image=logout_icon, border=0, bg="#e8f0fa").place(x=25, y=button_y + 208)
+    
+    logout_indicate = tk.Label(options_frame, text='', bg='#e8f0fa',height=2)
+    logout_indicate.place(x=5, y=indicate_y + 200)
     
     options_frame.pack(side=tk.LEFT)
     options_frame.pack_propagate(False)
@@ -548,6 +552,7 @@ def dashboard(username):
     main_frame.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
     
     indicate(home_indicate, dashboard_page)
+    
     
     root.mainloop()
 
