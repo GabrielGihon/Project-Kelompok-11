@@ -46,7 +46,7 @@ def dashboard(username):
             
             labels = 'Pemasukan', 'Pengeluaran'
             sizes = [sum1, sum2]
-            colors = ['green', 'red']
+            colors = ['blue', 'yellow']
             explode = (0.1, 0)  # memisahkan bagian pertama
             
             fig = Figure(figsize=(6, 6))
@@ -122,10 +122,10 @@ def dashboard(username):
         canvas.get_tk_widget().place(x=0, y=0, width=975, height=300)
         
         button_image_1 = PhotoImage(file='assets/updt.png')
-        logo_update = tk.Label(frame_totalsaldo, image=saldo_image )
+        logo_update = tk.Label(home_frame, image=saldo_image )
         logo_update.image = button_image_1
-        button_1 = Button(
-            root , border=0, bg="white",
+        button_1 = Button( home_frame,
+             border=0, bg="white",
             image=button_image_1, command=update_data
         )
         button_1.place(x=1100, y=80)
@@ -171,7 +171,7 @@ def dashboard(username):
         ttl_indicate = tk.Label(frame_atas, text='', bg='green', height=60)
         ttl_indicate.place(x=0, y=0)
         
-        frame_bawah = tk.Frame(main_frame, width=975, height=500, bg='#e8f0fa')
+        frame_bawah = tk.Frame(main_frame, width=675, height=400, bg='#e8f0fa')
         frame_bawah.place(x=10, y=150)
         
         lb_3 = tk.Label(frame_bawah, text='Pemasukan', font=('Poppins',20), fg='Black', bg='#e8f0fa')
@@ -197,8 +197,15 @@ def dashboard(username):
         amount_entry = tk.Entry(frame_bawah)
         amount_entry.place(x=250, y=200)
         
-        save_btn = tk.Button(frame_bawah, text='Save', font=('Bold', 15), fg='#158aff', bd=0, bg='White', command=simpan_pemasukan)
-        save_btn.place(x=200, y=250)
+        button_image_1 = PhotoImage(file='assets/sve.png')
+        logo_update = tk.Label(frame_bawah, image=button_image_1 )
+        logo_update.image = button_image_1
+        button_1 = Button(
+            frame_bawah , border=0, bg="#e8f0fa",
+            image=button_image_1, command=simpan_pemasukan
+        )
+        button_1.place(x=300, y=265)
+
         
     def pengeluaran_page():
         global simpan_pengeluaran, total_pengeluaran
@@ -236,8 +243,7 @@ def dashboard(username):
                 lb_utama1.config(text="Total Pengeluaran: 0")
         
         frame_atas = tk.Frame(main_frame, width=975, height=40, bg='#e8f0fa')
-        lb_utama = tk.Label(main_frame, text='Pengeluaran', font=('Poppins', 20), fg='Black', bg='White')
-        lb_utama.place(x=30, y=100)
+        
         
         frame_atas = tk.Frame(main_frame, width=975, height=60, bg='#e8f0fa')
         frame_atas.place(x=10, y=10)
@@ -245,10 +251,10 @@ def dashboard(username):
         ttl_indicate = tk.Label(frame_atas, text='', bg='red', height=60)
         ttl_indicate.place(x=0, y=0)
         
-        frame_bawah = tk.Frame(main_frame, width=975, height=500, bg='#e8f0fa')
+        frame_bawah = tk.Frame(main_frame, width=675, height=400, bg='#e8f0fa')
         frame_bawah.place(x=10, y=150)
         
-        lb_3 = tk.Label(frame_bawah, text='ISI', font=('Poppins', 20), fg='Black', bg='#e8f0fa')
+        lb_3 = tk.Label(frame_bawah, text='Pengeluaran', font=('Poppins', 20), fg='Black', bg='#e8f0fa')
         lb_3.place(x=65, y=20)
         
         lb_utama1 = tk.Label(main_frame, text="Total Pengeluaran: 0", font=('Poppins', 20), fg='Black', bg='#e8f0fa')
@@ -271,8 +277,14 @@ def dashboard(username):
         amount_entry = tk.Entry(frame_bawah)
         amount_entry.place(x=250, y=200)
         
-        save_btn = tk.Button(frame_bawah, text='Save', font=('Bold', 15), fg='#158aff', bd=0, bg='White', command=simpan_pengeluaran)
-        save_btn.place(x=200, y=250)
+        button_image_1 = PhotoImage(file='assets/sve.png')
+        logo_update = tk.Label(frame_bawah, image=button_image_1 )
+        logo_update.image = button_image_1
+        button_1 = Button(
+            frame_bawah , border=0, bg="#e8f0fa",
+            image=button_image_1, command=simpan_pengeluaran
+        )
+        button_1.place(x=300, y=265)
     
     def tagihan_page():
         def display_tagihan():
@@ -308,16 +320,14 @@ def dashboard(username):
         lb_utama = tk.Label(main_frame, text='Selamat Datang, ', font=('Poppins', 20), fg='Black', bg='#e8f0fa')
         lb_utama.place(x=60, y=20)
         
-        lb_utama = tk.Label(main_frame, text='Tagihan', font=('Poppins', 20), fg='Black', bg='White')
-        lb_utama.place(x=30, y=100)
         
         frame_atas = tk.Frame(main_frame, width=975, height=60, bg='#e8f0fa')
         frame_atas.place(x=10, y=10)
         
-        frame_bawah = tk.Frame(main_frame, width=975, height=500, bg='#e8f0fa')
+        frame_bawah = tk.Frame(main_frame, width=850, height=500, bg='#e8f0fa')
         frame_bawah.place(x=10, y=150)
         
-        lb_3 = tk.Label(frame_bawah, text='ISI', font=('Poppins', 20), fg='Black', bg='#e8f0fa')
+        lb_3 = tk.Label(frame_bawah, text='Tagihan', font=('Poppins', 20), fg='Black', bg='#e8f0fa')
         lb_3.place(x=65, y=20)
         
         lb_utama1 = tk.Label(main_frame, text="Total Tagihan: 0", font=('Poppins', 20), fg='Black', bg='#e8f0fa')
@@ -340,11 +350,24 @@ def dashboard(username):
         amount_entry = tk.Entry(frame_bawah)
         amount_entry.place(x=250, y=200)
         
-        save_btn = tk.Button(frame_bawah, text='Save', font=('Bold', 15), fg='#158aff', bd=0, bg='White', command=simpan_tagihan)
-        save_btn.place(x=200, y=250)
-        
-        view_btn = tk.Button(frame_bawah, text='View Tagihan', font=('Bold', 15), fg='#158aff', bd=0, bg='White', command=display_tagihan)
-        view_btn.place(x=300, y=250)
+        button_image_1 = PhotoImage(file='assets/file.png')
+        logo_update = tk.Label(frame_bawah, image=button_image_1 )
+        logo_update.image = button_image_1
+        button_1 = Button(frame_bawah,
+             border=0, bg="#e8f0fa",
+            image=button_image_1, command=simpan_tagihan  
+        )
+        button_1.place(x=650, y=10)
+
+        button_image_2 = PhotoImage(file='assets/sove.png')
+        logo_update = tk.Label(frame_bawah, image=button_image_2 )
+        logo_update.image = button_image_2
+        button_2 = Button(frame_bawah,
+             border=0, bg="#e8f0fa",
+            image=button_image_2, command=display_tagihan
+        )
+        button_2.place(x=250, y=250)
+
         
         columns = ("Tanggal", "Keterangan", "Keperluan", "Jumlah")
         tree = ttk.Treeview(frame_bawah, columns=columns, show="headings")
@@ -374,14 +397,17 @@ def dashboard(username):
         laporan_frame.pack(fill="both", expand=True)
         
         lb_utama = tk.Label(laporan_frame, text=f'Selamat Datang, {username}', font=('Poppins', 20), fg='Black', bg='#e8f0fa')
-        lb_utama.place(x=60, y=20)
+        lb_utama.place(x=600, y=20)
         
-        lb_laporan = tk.Label(laporan_frame, text='Laporan', font=('Poppins', 20), fg='Black', bg='White')
-        lb_laporan.pack(pady=10)
         
+        
+
         frame_atas = tk.Frame(main_frame, width=975, height=60, bg='#e8f0fa')
         frame_atas.place(x=10, y=10)
         
+        lb_laporan = tk.Label(frame_atas, text='Laporan', font=('Poppins', 20), fg='Black', bg='White')
+        lb_laporan.pack(pady=10)
+
         frame_bawah = tk.Frame(laporan_frame, bg='#e8f0fa')
         frame_bawah.pack(fill="both", expand=True, padx=10, pady=10)
         
@@ -406,11 +432,28 @@ def dashboard(username):
         def open_pengeluaran():
             display_csv_data(pengeluaran_data)
         
-        open_pemasukan_button = tk.Button(frame_atas, text="Open Pemasukan CSV", command=open_pemasukan)
-        open_pemasukan_button.pack(side=tk.LEFT, padx=20, pady=10)
+        button_image_1 = PhotoImage(file='assets/grn.png')
+        logo_update = tk.Label(frame_atas, image=button_image_1 )
+        logo_update.image = button_image_1
+        button_1 = Button(frame_atas,
+             border=0, bg="#e8f0fa",
+            image=button_image_1, command=open_pemasukan
+        )
+        button_1.place(x=30, y=0)
+
+        button_image_2 = PhotoImage(file='assets/red.png')
+        logo_update = tk.Label(frame_atas, image=button_image_2 )
+        logo_update.image = button_image_2
+        button_2 = Button(frame_atas,
+             border=0, bg="#e8f0fa",
+            image=button_image_2, command=open_pengeluaran
+        )
+        button_2.place(x=100, y=0)
+        tree = ttk.Treeview(frame_bawah, show="headings")
+        tree.pack(padx=20, pady=20, fill="both", expand=True)
         
-        open_pengeluaran_button = tk.Button(frame_atas, text="Open Pengeluaran CSV", command=open_pengeluaran)
-        open_pengeluaran_button.pack(side=tk.LEFT, padx=20, pady=10)
+        status_label = tk.Label(frame_bawah, text="", padx=20, pady=10, bg='#e8f0fa')
+        status_label.pack()
         
         tree = ttk.Treeview(frame_bawah, show="headings")
         tree.pack(padx=20, pady=20, fill="both", expand=True)
