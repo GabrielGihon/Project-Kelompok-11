@@ -52,8 +52,7 @@ def dashboard(username):
             fig = Figure(figsize=(6, 6))
             ax = fig.add_subplot(111)
             
-            ax.pie(sizes, explode=explode, labels=labels, colors=colors,
-                    autopct='%1.1f%%', startangle=140)
+            ax.pie(sizes, explode=explode, labels=labels, colors=colors, autopct='%1.1f%%', startangle=140)
             
             ax.axis('equal') 
             return fig
