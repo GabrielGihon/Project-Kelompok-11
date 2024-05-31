@@ -253,33 +253,40 @@ def dashboard(username):
         save_btn.place(x=200, y=250)
 
     def tagihan_page():
+        def display_tagihan():
+            try:
+                tagihan_data = pd.read_csv(tagihan_filename)
+                display_csv_data(tagihan_data)
+            except FileNotFoundError:
+                messagebox.showinfo("Error", "File tagihan tidak ditemukan.")
+        
+        def display_csv_data(dataframe):
+            tree.delete(*tree.get_children())  # Clear the current data
+
+            tree["columns"] = list(dataframe.columns)
+            tree["show"] = "headings"
+            
+            for col in dataframe.columns:
+                tree.heading(col, text=col)
+                tree.column(col, width=100)
+            
+            for index, row in dataframe.iterrows():
+                tree.insert("", "end", values=list(row))
+
+            status_label.config(text="Data loaded")
+
         def simpan_tagihan():
-            global filename
-            
-            date_value = date_entry.get()
-            description_value = description_entry.get()
-            purpose_value = purpose_combobox.get()
-            amount_value = amount_entry.get()
-            
-            filename = f"database/{username}/tagihan.csv"
-            
-            with open(filename, 'a', newline='') as csvfile:
-                writer = csv.writer(csvfile)
-                writer.writerow([date_value, description_value, purpose_value, amount_value])
-            
-            messagebox.showinfo("Success", "Data saved successfully!")
-            
-            date_entry.delete(0, tk.END)
-            description_entry.delete(0, tk.END)
-            purpose_combobox.set('')
-            amount_entry.delete(0, tk.END)
-            
+            pass 
+
+        tagihan_filename = f"database/{username}/tagihan.csv"
+        
         tagihan_frame = tk.Frame(main_frame, bg='White')
+        tagihan_frame.place(x=10, y=150, width=975, height=500)
 
         lb_utama = tk.Label(main_frame, text='Selamat Datang, ', font=('Poppins', 20), fg='Black', bg='#e8f0fa')
         lb_utama.place(x=60, y=20)
 
-        lb_utama = tk.Label(main_frame, text='Tagihan ', font=('Poppins', 20), fg='Black', bg='White')
+        lb_utama = tk.Label(main_frame, text='Tagihan', font=('Poppins', 20), fg='Black', bg='White')
         lb_utama.place(x=30, y=100)
 
         frame_atas = tk.Frame(main_frame, width=975, height=60, bg='#e8f0fa')
@@ -301,21 +308,37 @@ def dashboard(username):
         tk.Label(frame_bawah, text="Masukkan Keterangan Tagihan:", bg='#e8f0fa').place(x=65, y=120)
         description_entry = tk.Entry(frame_bawah)
         description_entry.place(x=250, y=120)
-
+        
         tk.Label(frame_bawah, text="Masukkan Keperluan Tagihan:", bg='#e8f0fa').place(x=65, y=160)
         purpose_combobox = ttk.Combobox(frame_bawah, values=["Makan dan Minum", "Transportasi", "Belanja", "Lainnya"])
         purpose_combobox.place(x=250, y=160)
         purpose_combobox.current(0)
-
+        
         tk.Label(frame_bawah, text="Masukkan Jumlah Tagihan:", bg='#e8f0fa').place(x=65, y=200)
         amount_entry = tk.Entry(frame_bawah)
         amount_entry.place(x=250, y=200)
-
+        
         save_btn = tk.Button(frame_bawah, text='Save', font=('Bold', 15), fg='#158aff', bd=0, bg='White', command=simpan_tagihan)
         save_btn.place(x=200, y=250)
+        
+        view_btn = tk.Button(frame_bawah, text='View Tagihan', font=('Bold', 15), fg='#158aff', bd=0, bg='White', command=display_tagihan)
+        view_btn.place(x=300, y=250)
+        
+        columns = ("Tanggal", "Keterangan", "Keperluan", "Jumlah")
+        tree = ttk.Treeview(frame_bawah, columns=columns, show="headings")
+        tree.place(x=10, y=300, width=800, height=190)
 
+        for col in columns:
+            tree.heading(col, text=col)
+            tree.column(col, width=100)
+
+        status_label = tk.Label(frame_bawah, text="", font=('Poppins', 12), fg='Black', bg='White')
+        status_label.place(x=10, y=270)
+        
         tagihan_frame.pack(pady=20)
 
+
+        
     def laporan_page():
         pemasukan_filename = f"database/{username}/pemasukan.csv"
         pengeluaran_filename = f"database/{username}/pengeluaran.csv"
@@ -332,13 +355,13 @@ def dashboard(username):
         
         lb_utama = tk.Label(laporan_frame, text=f'Selamat Datang, {username}', font=('Poppins', 20), fg='Black', bg='#e8f0fa')
         lb_utama.place(x=60, y=20)
-
+        
         lb_laporan = tk.Label(laporan_frame, text='Laporan', font=('Poppins', 20), fg='Black', bg='White')
         lb_laporan.pack(pady=10)
-
-        frame_atas = tk.Frame(laporan_frame, bg='#e8f0fa')
-        frame_atas.pack(fill='x', padx=10, pady=10)
-
+        
+        frame_atas = tk.Frame(main_frame, width=975, height=60, bg='#e8f0fa')
+        frame_atas.place(x=10, y=10)
+        
         frame_bawah = tk.Frame(laporan_frame, bg='#e8f0fa')
         frame_bawah.pack(fill="both", expand=True, padx=10, pady=10)
         
