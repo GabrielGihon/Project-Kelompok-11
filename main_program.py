@@ -7,6 +7,7 @@ from tkcalendar import DateEntry
 import csv
 import package.login
 import pandas as pd
+from tkinter import filedialog
 
 def dashboard(username):
     root = tk.Tk()
@@ -252,6 +253,27 @@ def dashboard(username):
         save_btn.place(x=200, y=250)
 
     def tagihan_page():
+        def simpan_tagihan():
+            global filename
+            
+            date_value = date_entry.get()
+            description_value = description_entry.get()
+            purpose_value = purpose_combobox.get()
+            amount_value = amount_entry.get()
+            
+            filename = f"database/{username}/tagihan.csv"
+            
+            with open(filename, 'a', newline='') as csvfile:
+                writer = csv.writer(csvfile)
+                writer.writerow([date_value, description_value, purpose_value, amount_value])
+            
+            messagebox.showinfo("Success", "Data saved successfully!")
+            
+            date_entry.delete(0, tk.END)
+            description_entry.delete(0, tk.END)
+            purpose_combobox.set('')
+            amount_entry.delete(0, tk.END)
+            
         tagihan_frame = tk.Frame(main_frame, bg='White')
 
         lb_utama = tk.Label(main_frame, text='Selamat Datang, ', font=('Poppins', 20), fg='Black', bg='#e8f0fa')
@@ -285,32 +307,74 @@ def dashboard(username):
         purpose_combobox.place(x=250, y=160)
         purpose_combobox.current(0)
 
-        tk.Label(frame_bawah, text="Masukkan Jumlah Pengeluaran:", bg='#e8f0fa').place(x=65, y=200)
+        tk.Label(frame_bawah, text="Masukkan Jumlah Tagihan:", bg='#e8f0fa').place(x=65, y=200)
         amount_entry = tk.Entry(frame_bawah)
         amount_entry.place(x=250, y=200)
 
-        save_btn = tk.Button(frame_bawah, text='Save', font=('Bold', 15), fg='#158aff', bd=0, bg='White', command=simpan_pengeluaran)
+        save_btn = tk.Button(frame_bawah, text='Save', font=('Bold', 15), fg='#158aff', bd=0, bg='White', command=simpan_tagihan)
         save_btn.place(x=200, y=250)
 
         tagihan_frame.pack(pady=20)
 
     def laporan_page():
-        laporan_frame = tk.Frame(main_frame,bg='White')
-
-        lb_utama = tk.Label(main_frame, text='Selamat Datang, ', font=('Poppins', 20), fg='Black', bg='#e8f0fa')
+        pemasukan_filename = f"database/{username}/pemasukan.csv"
+        pengeluaran_filename = f"database/{username}/pengeluaran.csv"
+        
+        try:
+            pemasukan_data = pd.read_csv(pemasukan_filename)
+            pengeluaran_data = pd.read_csv(pengeluaran_filename)
+        except FileNotFoundError:
+            messagebox.showinfo("Error", "File pemasukan/pengeluaran tidak ditemukan.")
+            return
+        
+        laporan_frame = tk.Frame(main_frame, bg='White')
+        laporan_frame.pack(fill="both", expand=True)
+        
+        lb_utama = tk.Label(laporan_frame, text=f'Selamat Datang, {username}', font=('Poppins', 20), fg='Black', bg='#e8f0fa')
         lb_utama.place(x=60, y=20)
 
-        lb_utama = tk.Label(main_frame, text='Laporan ', font=('Poppins', 20), fg='Black', bg='White')
-        lb_utama.place(x=30, y=100)
+        lb_laporan = tk.Label(laporan_frame, text='Laporan', font=('Poppins', 20), fg='Black', bg='White')
+        lb_laporan.pack(pady=10)
 
-        frame_atas = tk.Frame(main_frame, width=975, height=60, bg='#e8f0fa')
-        frame_atas.place(x=10, y=10)
+        frame_atas = tk.Frame(laporan_frame, bg='#e8f0fa')
+        frame_atas.pack(fill='x', padx=10, pady=10)
 
-        frame_bawah = tk.Frame(main_frame, width=975, height=500, bg='#e8f0fa')
-        frame_bawah.place(x=10, y=150)
+        frame_bawah = tk.Frame(laporan_frame, bg='#e8f0fa')
+        frame_bawah.pack(fill="both", expand=True, padx=10, pady=10)
+        
+        def display_csv_data(dataframe):
+            tree.delete(*tree.get_children())  # Clear the current data
 
-        laporan_frame.pack(pady=20)
+            tree["columns"] = list(dataframe.columns)
+            tree["show"] = "headings"
+            
+            for col in dataframe.columns:
+                tree.heading(col, text=col)
+                tree.column(col, width=100)
+            
+            for index, row in dataframe.iterrows():
+                tree.insert("", "end", values=list(row))
 
+            status_label.config(text="data loaded")
+
+        def open_pemasukan():
+            display_csv_data(pemasukan_data)
+
+        def open_pengeluaran():
+            display_csv_data(pengeluaran_data)
+        
+        open_pemasukan_button = tk.Button(frame_atas, text="Open Pemasukan CSV", command=open_pemasukan)
+        open_pemasukan_button.pack(side=tk.LEFT, padx=20, pady=10)
+        
+        open_pengeluaran_button = tk.Button(frame_atas, text="Open Pengeluaran CSV", command=open_pengeluaran)
+        open_pengeluaran_button.pack(side=tk.LEFT, padx=20, pady=10)
+        
+        tree = ttk.Treeview(frame_bawah, show="headings")
+        tree.pack(padx=20, pady=20, fill="both", expand=True)
+        
+        status_label = tk.Label(frame_bawah, text="", padx=20, pady=10, bg='#e8f0fa')
+        status_label.pack()
+    
     def hide_indicators():
         home_indicate.config(bg='#e8f0fa')
         pemasukan_indicate.config(bg='#e8f0fa')
