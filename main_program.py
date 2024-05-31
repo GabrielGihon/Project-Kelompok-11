@@ -21,21 +21,21 @@ def dashboard(username):
 
             data = pd.read_csv(filename1)
             total1 = data['jumlah'].sum()
-            lb_2.config(text=f"Total Pemasukan :\n\n{total1}")
+            lb_2.config(text=f"Pemasukan \n\n{total1}")
             
             data = pd.read_csv(filename2)
             total2 = data['jumlah'].sum()
-            lb_3.config(text=f"Total Pengeluaran :\n\n{total2}")
+            lb_3.config(text=f"Pengeluaran \n\n{total2}")
             
             total_uang = total1 - total2
-            lb_1.config(text=f"Total Saldo :\n\n{total_uang}")
+            lb_1.config(text=f"Total Saldo \n\n{total_uang}")
         
         home_frame = tk.Frame(main_frame, bg = 'White')
         
         frame_atas = tk.Frame(main_frame, width=975, height=60, bg='#e8f0fa')
         frame_atas.place(x=10, y=10)
         
-        lb_utama = tk.Label(main_frame, text='Selamat Datang, ', font=('Poppins', 20), fg='Black', bg='#e8f0fa')
+        lb_utama = tk.Label(main_frame, text=f'Selamat Datang, {username}', font=('Poppins', 20), fg='Black', bg='#e8f0fa')
         lb_utama.place(x=60, y=20)
         
         lb_utama = tk.Label(main_frame, text='Dashboard ', font=('Poppins', 20), fg='Black', bg='White')
@@ -44,30 +44,69 @@ def dashboard(username):
         frame_totalsaldo = tk.Frame(main_frame, width=250, height=130, bg='#e8f0fa')
         frame_totalsaldo.place(x=100, y=150)
         
-        lb_1 = tk.Label(frame_totalsaldo, text='Total Saldo : \n\n0', font='Poppins', bg='#e8f0fa', fg='Black')
+        ttl_indicate = tk.Label(frame_totalsaldo, text='', bg='blue', height=10)
+        ttl_indicate.place(x=0, y=0)
+
+        saldo_image = tk.PhotoImage(file='assets/ttldn.png')
+        logo_saldo = tk.Label(frame_totalsaldo, image=saldo_image, border=0, bg="#e8f0fa")
+        logo_saldo.image = saldo_image 
+        logo_saldo.place(x=14, y=30)
+
+        lb_1 = tk.Label(frame_totalsaldo, text='Total Saldo  \n\n0', font='Poppins', bg='#e8f0fa', fg='Black')
         lb_1.place(x=100, y=20)
         
         frame_pemasukan = tk.Frame(main_frame, width=250, height=130, bg='#e8f0fa')
         frame_pemasukan.place(x=400, y=150)
+
         
-        lb_2 = tk.Label(frame_pemasukan, text="Total Pemasukan :\n\n0", font='Poppins', bg='#e8f0fa', fg='Black')
+        lb_2 = tk.Label(frame_pemasukan, text="Pemasukan \n\n0", font='Poppins', bg='#e8f0fa', fg='Black')
         lb_2.place(x=100, y=20)
         
+        msk_indicate = tk.Label(frame_pemasukan, text='', bg='#03fc7b', height=10)
+        msk_indicate.place(x=0, y=0)
+
+        pemasukan_image = tk.PhotoImage(file='assets/up2.png')
+        logo_masuk = tk.Label(frame_pemasukan, image=pemasukan_image, border=0, bg="#e8f0fa")
+        logo_masuk.image = pemasukan_image 
+        logo_masuk.place(x=14, y=30)
+
         frame_pengeluaran = tk.Frame(main_frame, width=250, height=130, bg='#e8f0fa')
         frame_pengeluaran.place(x=700, y=150)
+
         
-        lb_3 = tk.Label(frame_pengeluaran, text='Total Pengeluaran :\n\n0', font='Poppins', bg='#e8f0fa', fg='Black')
+        lb_3 = tk.Label(frame_pengeluaran, text='Pengeluaran \n\n0', font='Poppins', bg='#e8f0fa', fg='Black')
         lb_3.place(x=100, y=20)
         
         pengeluaran_lb = tk.Label(home_frame, text='Dashboard', font=('Bold', 34))
         pengeluaran_lb.place(x=10, y=80)
+
+        lr_indicate = tk.Label(frame_pengeluaran, text='', bg='#fa2f69', height=10)
+        lr_indicate.place(x=0, y=0)
+
+        pengeluaran_image = tk.PhotoImage(file='assets/loss2.png')
+        logo_keluar = tk.Label(frame_pengeluaran, image=pengeluaran_image, border=0, bg="#e8f0fa")
+        logo_keluar.image = pengeluaran_image 
+        logo_keluar.place(x=14, y=30)
         
         frame_bawah = tk.Frame(main_frame, width=975, height=300, bg='#e8f0fa')
         frame_bawah.place(x=10, y=350)
+
+    
         
-        update_btn = tk.Button(frame_bawah, width=10, height=10, text="update", bg="Red", command=update_data)
-        update_btn.place(x=50, y=50)
+       
+            
+    
+        button_image_1 = PhotoImage(file='assets/updt.png')
+        logo_update = tk.Label(frame_totalsaldo, image=saldo_image )
+        logo_update.image = button_image_1
+        button_1 = Button(
+            root , border=0, bg="white",
+            image=button_image_1, command=update_data
+        )
+        button_1.place(x=1100, y=80)
+
         
+
         home_frame.pack(pady=100)
         
     def pemasukan_page():
@@ -98,38 +137,40 @@ def dashboard(username):
                 data = pd.read_csv(filename)
                 total = data['jumlah'].sum()
                 lb_utama1.config(text=f"Total Pemasukan : {total}")
-                lb_2.config(text=f"Total Pemasukan :\n\n{total}")
             except FileNotFoundError:
                 lb_utama1.config(text="Total Pemasukan : 0")
             except KeyError:
                 lb_utama1.config(text="Total Pemasukan : 0")
         
-        frame_atas = tk.Frame(main_frame, width=975, height=40, bg='#c3c3c3')
+        frame_atas = tk.Frame(main_frame, width=975, height=60, bg='#e8f0fa')
         frame_atas.place(x=10, y=10)
-        
-        frame_bawah = tk.Frame(main_frame, width=975, height=500, bg='#c3c3c3')
+
+        ttl_indicate = tk.Label(frame_atas, text='', bg='green', height=60)
+        ttl_indicate.place(x=0, y=0)
+
+        frame_bawah = tk.Frame(main_frame, width=975, height=500, bg='#e8f0fa')
         frame_bawah.place(x=10, y=150)
         
-        lb_3 = tk.Label(frame_bawah, text='Pemasukan', font=('Poppins',20), fg='Black', bg='#c3c3c3')
+        lb_3 = tk.Label(frame_bawah, text='Pemasukan', font=('Poppins',20), fg='Black', bg='#e8f0fa')
         lb_3.place(x=65, y=20)
         
         lb_utama1 = tk.Label(main_frame, text="Total Pemasukan : 0", font=('Poppins', 20), fg='Black', bg='#e8f0fa')
         lb_utama1.place(x=60, y=20)
         
-        tk.Label(frame_bawah, text="Masukkan Tanggal Pemasukan:").place(x=65, y=80)
+        tk.Label(frame_bawah, text="Masukkan Tanggal Pemasukan:", bg='#e8f0fa').place(x=65, y=80)
         date_entry = DateEntry(frame_bawah, date_pattern='dd/MM/yyyy')
         date_entry.place(x=250, y=80)
         
-        tk.Label(frame_bawah, text="Masukkan Keterangan Pemasukan:").place(x=65, y=120)
+        tk.Label(frame_bawah, text="Masukkan Keterangan Pemasukan:", bg='#e8f0fa').place(x=65, y=120)
         description_entry = tk.Entry(frame_bawah)
         description_entry.place(x=250, y=120)
         
-        tk.Label(frame_bawah, text="Masukkan Sumber Pemasukan:").place(x=65, y=160)
+        tk.Label(frame_bawah, text="Masukkan Sumber Pemasukan:", bg='#e8f0fa').place(x=65, y=160)
         purpose_combobox = ttk.Combobox(frame_bawah, values=["Gaji", "Investasi", "Part time", "Lainnya"])
         purpose_combobox.place(x=250, y=160)
         purpose_combobox.current(0)
         
-        tk.Label(frame_bawah, text="Masukkan Jumlah Pemasukan:").place(x=65, y=200)
+        tk.Label(frame_bawah, text="Masukkan Jumlah Pemasukan:", bg='#e8f0fa').place(x=65, y=200)
         amount_entry = tk.Entry(frame_bawah)
         amount_entry.place(x=250, y=200)
         
@@ -171,12 +212,15 @@ def dashboard(username):
             except KeyError:
                 lb_utama1.config(text="Total Pengeluaran: 0")
         
-        frame_atas = tk.Frame(main_frame, width=975, height=40, bg='#c3c3c3')
+        frame_atas = tk.Frame(main_frame, width=975, height=40, bg='#e8f0fa')
         lb_utama = tk.Label(main_frame, text='Pengeluaran', font=('Poppins', 20), fg='Black', bg='White')
         lb_utama.place(x=30, y=100)
 
         frame_atas = tk.Frame(main_frame, width=975, height=60, bg='#e8f0fa')
         frame_atas.place(x=10, y=10)
+
+        ttl_indicate = tk.Label(frame_atas, text='', bg='red', height=60)
+        ttl_indicate.place(x=0, y=0)
 
         frame_bawah = tk.Frame(main_frame, width=975, height=500, bg='#e8f0fa')
         frame_bawah.place(x=10, y=150)
@@ -222,6 +266,32 @@ def dashboard(username):
         frame_bawah = tk.Frame(main_frame, width=975, height=500, bg='#e8f0fa')
         frame_bawah.place(x=10, y=150)
 
+        lb_3 = tk.Label(frame_bawah, text='ISI', font=('Poppins', 20), fg='Black', bg='#e8f0fa')
+        lb_3.place(x=65, y=20)
+
+        lb_utama1 = tk.Label(main_frame, text="Total Tagihan: 0", font=('Poppins', 20), fg='Black', bg='#e8f0fa')
+        lb_utama1.place(x=60, y=20)
+        
+        tk.Label(frame_bawah, text="Masukkan Tanggal Tagihan:", bg='#e8f0fa').place(x=65, y=80)
+        date_entry = DateEntry(frame_bawah, date_pattern='dd/MM/yyyy')
+        date_entry.place(x=250, y=80)
+
+        tk.Label(frame_bawah, text="Masukkan Keterangan Tagihan:", bg='#e8f0fa').place(x=65, y=120)
+        description_entry = tk.Entry(frame_bawah)
+        description_entry.place(x=250, y=120)
+
+        tk.Label(frame_bawah, text="Masukkan Keperluan Tagihan:", bg='#e8f0fa').place(x=65, y=160)
+        purpose_combobox = ttk.Combobox(frame_bawah, values=["Makan dan Minum", "Transportasi", "Belanja", "Lainnya"])
+        purpose_combobox.place(x=250, y=160)
+        purpose_combobox.current(0)
+
+        tk.Label(frame_bawah, text="Masukkan Jumlah Pengeluaran:", bg='#e8f0fa').place(x=65, y=200)
+        amount_entry = tk.Entry(frame_bawah)
+        amount_entry.place(x=250, y=200)
+
+        save_btn = tk.Button(frame_bawah, text='Save', font=('Bold', 15), fg='#158aff', bd=0, bg='White', command=simpan_pengeluaran)
+        save_btn.place(x=200, y=250)
+
         tagihan_frame.pack(pady=20)
 
     def laporan_page():
@@ -261,7 +331,7 @@ def dashboard(username):
     options_frame = tk.Frame(root, bg='#e8f0fa')
 
     img = PhotoImage(file="assets/LogoKecil.png")
-    Label(options_frame, image=img, border=0, bg="#e8f0fa").place(x=0, y=0)
+    Label(options_frame, image=img, border=0, bg="#e8f0fa").place(x=20, y=0)
 
     img2 = PhotoImage(file="assets/TextAja.png")
     Label(options_frame, image=img2, border=0, bg="#e8f0fa").place(x=90, y=10)
@@ -270,7 +340,7 @@ def dashboard(username):
     button_y = 120
     indicate_y = 125
 
-    home_btn = tk.Button(options_frame, text='Dashboard', font=('Poppins', 15), fg='#0097B2', bd=0, bg='#e8f0fa', command=lambda: indicate(home_indicate, dashboard_page))
+    home_btn = tk.Button(options_frame, text='Dashboard', font=('century gothic', 15), fg='#0097B2', bd=0, bg='#e8f0fa', command=lambda: indicate(home_indicate, dashboard_page))
     home_btn.place(x=60, y=button_y +3 )
 
     home_icon = tk.PhotoImage(file="assets/dashboard.png")
@@ -279,7 +349,7 @@ def dashboard(username):
     home_indicate = tk.Label(options_frame, text='', bg='#e8f0fa', height=2)
     home_indicate.place(x=5, y=indicate_y)
     
-    pemasukan_btn = tk.Button(options_frame, text='Pemasukan', font=('Bold', 15), fg='#0097B2', bd=0, bg='#e8f0fa', command=lambda: indicate(pemasukan_indicate, pemasukan_page))
+    pemasukan_btn = tk.Button(options_frame, text='Pemasukan', font=('century gothic', 15), fg='#0097B2', bd=0, bg='#e8f0fa', command=lambda: indicate(pemasukan_indicate, pemasukan_page))
     pemasukan_btn.place(x=60, y=button_y + 40)
 
     pemasukan_icon = tk.PhotoImage(file="assets/profit.png")
@@ -288,7 +358,7 @@ def dashboard(username):
     pemasukan_indicate = tk.Label(options_frame, text='', bg='#e8f0fa', height=2)
     pemasukan_indicate.place(x=5, y=indicate_y + 40)
 
-    pengeluaran_btn = tk.Button(options_frame, text='Pengeluaran', font=('Bold', 15), fg='#0097B2', bd=0, bg='#e8f0fa', command=lambda: indicate(pengeluaran_indicate, pengeluaran_page))
+    pengeluaran_btn = tk.Button(options_frame, text='Pengeluaran', font=('century gothic', 15), fg='#0097B2', bd=0, bg='#e8f0fa', command=lambda: indicate(pengeluaran_indicate, pengeluaran_page))
     pengeluaran_btn.place(x=60, y=button_y + 80)
 
     pengeluaran_icon = tk.PhotoImage(file="assets/donation.png")
@@ -297,7 +367,7 @@ def dashboard(username):
     pengeluaran_indicate = tk.Label(options_frame, text='', bg='#e8f0fa',height=2)
     pengeluaran_indicate.place(x=5, y=indicate_y + 80)
 
-    tagihan_btn = tk.Button(options_frame, text='Tagihan', font=('Bold', 15), fg='#0097B2', bd=0, bg='#e8f0fa', command=lambda: indicate(tagihan_indicate, tagihan_page))
+    tagihan_btn = tk.Button(options_frame, text='Tagihan', font=('century gothic', 15), fg='#0097B2', bd=0, bg='#e8f0fa', command=lambda: indicate(tagihan_indicate, tagihan_page))
     tagihan_btn.place(x=60, y=button_y + 120)
 
     tagihan_icon = tk.PhotoImage(file="assets/bill.png")
@@ -306,7 +376,7 @@ def dashboard(username):
     tagihan_indicate = tk.Label(options_frame, text='', bg='#e8f0fa',height=2)
     tagihan_indicate.place(x=5, y=indicate_y + 120)
 
-    laporan_btn = tk.Button(options_frame, text='Laporan', font=('Bold', 15), fg='#0097B2', bd=0, bg='#e8f0fa', command=lambda: indicate(laporan_indicate, laporan_page))
+    laporan_btn = tk.Button(options_frame, text='Laporan', font=('century gothic', 15), fg='#0097B2', bd=0, bg='#e8f0fa', command=lambda: indicate(laporan_indicate, laporan_page))
     laporan_btn.place(x=60, y=button_y + 160)
 
     laporan_icon = tk.PhotoImage(file="assets/prescription.png")
@@ -314,6 +384,12 @@ def dashboard(username):
 
     laporan_indicate = tk.Label(options_frame, text='', bg='#e8f0fa',height=2)
     laporan_indicate.place(x=5, y=indicate_y + 160)
+
+    logout_btn = tk.Button(options_frame, text='Logout', font=('century gothic', 15), fg='#0097B2', bd=0, bg='#e8f0fa', command=lambda: indicate(laporan_indicate, laporan_page))
+    laporan_btn.place(x=60, y=button_y + 160)
+
+    logout_icon = tk.PhotoImage(file="assets/prescription.png")
+    Label(options_frame, image=laporan_icon, border=0, bg="#e8f0fa").place(x=25, y=button_y + 208)
 
     options_frame.pack(side=tk.LEFT)
     options_frame.pack_propagate(False)
